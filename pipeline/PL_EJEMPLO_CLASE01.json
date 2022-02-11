@@ -1,6 +1,23 @@
 {
 	"name": "PL_EJEMPLO_CLASE01",
 	"properties": {
+		"activities": [
+			{
+				"name": "Configurar saludo",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "saludo",
+					"value": "Hola dtf"
+				}
+			}
+		],
+		"variables": {
+			"saludo": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "CLASE01"
 		},

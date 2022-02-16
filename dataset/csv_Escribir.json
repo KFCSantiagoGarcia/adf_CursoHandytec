@@ -21,6 +21,14 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().nombreArchivo",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().directorio",
+					"type": "Expression"
+				},
 				"fileSystem": "aci-santiago-garcia"
 			},
 			"columnDelimiter": ";",

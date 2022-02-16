@@ -17,7 +17,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT [idFactura]\n      ,[idCliente]\n      ,[idEmpleado]\n      ,[fechaFactura]\n      ,[subtotal]\n      ,[impuestos]\n  FROM [dbo].[Factura]\n  WHERE YEAR([fechaFactura])=2017 AND MONTH([fechaFactura])=1\n",
+						"sqlReaderQuery": {
+							"value": "SELECT [idFactura]\n      ,[idCliente]\n      ,[idEmpleado]\n      ,[fechaFactura]\n      ,[subtotal]\n      ,[impuestos]\n  FROM [dbo].[Factura]\n  WHERE YEAR([fechaFactura])=@{pipeline().parameters.anio} \n  AND MONTH([fechaFactura])=@{pipeline().parameters.mes}",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -53,7 +56,10 @@
 						"referenceName": "csv_Escribir",
 						"type": "DatasetReference",
 						"parameters": {
-							"directorio": "FACTURA/2017/1",
+							"directorio": {
+								"value": "FACTURA/@{pipeline().parameters.anio}/@{pipeline().parameters.mes}",
+								"type": "Expression"
+							},
 							"nombreArchivo": "Factura.csv"
 						}
 					}

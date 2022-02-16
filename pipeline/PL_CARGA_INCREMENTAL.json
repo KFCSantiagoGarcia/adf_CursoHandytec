@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Copia Incremental",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -15,8 +15,49 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"enableStaging": false
-				}
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT [idFactura]\n      ,[idCliente]\n      ,[idEmpleado]\n      ,[fechaFactura]\n      ,[subtotal]\n      ,[impuestos]\n  FROM [dbo].[Factura]\n  WHERE YEAR([fechaFactura])=2017 AND MONTH([fechaFactura])=1\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "TBL_Leer",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "csv_Escribir",
+						"type": "DatasetReference",
+						"parameters": {
+							"directorio": "FACTURA/2017/1",
+							"nombreArchivo": "Factura.csv"
+						}
+					}
+				]
 			}
 		],
 		"folder": {

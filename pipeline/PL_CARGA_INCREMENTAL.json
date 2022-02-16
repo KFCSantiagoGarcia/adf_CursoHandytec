@@ -60,6 +60,16 @@
 				]
 			}
 		],
+		"parameters": {
+			"anio": {
+				"type": "string",
+				"defaultValue": "2017"
+			},
+			"mes": {
+				"type": "string",
+				"defaultValue": "1"
+			}
+		},
 		"folder": {
 			"name": "CLASE03"
 		},

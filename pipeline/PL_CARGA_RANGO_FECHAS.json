@@ -27,6 +27,51 @@
 					},
 					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "Iteracion de meses",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Generar rango fechas",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@array(activity('Generar rango fechas').output.value)",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "PL_CARGA_INCREMENTAL",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "PL_CARGA_INCREMENTAL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"anio": {
+										"value": "@item().anioCoste",
+										"type": "Expression"
+									},
+									"mes": {
+										"value": "@item().mesCorte",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
 			}
 		],
 		"folder": {

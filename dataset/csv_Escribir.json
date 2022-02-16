@@ -1,0 +1,25 @@
+{
+	"name": "csv_Escribir",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_kfc_DataLakeV2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "CLASE03"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "aci-santiago-garcia"
+			},
+			"columnDelimiter": ";",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

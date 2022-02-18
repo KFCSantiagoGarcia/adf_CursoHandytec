@@ -1,6 +1,80 @@
 {
 	"name": "PL_EJEMPLO_FLUJOS",
 	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Bandera",
+					"value": {
+						"value": "@add(1,6)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Ejecucion Correcta",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Resultado",
+					"value": "OK"
+				}
+			},
+			{
+				"name": "Ejecucion Fallida",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Resultado",
+					"value": "FALLIDA"
+				}
+			},
+			{
+				"name": "Resultado Adicional",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Ejecucion Fallida",
+						"dependencyConditions": [
+							"Skipped"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Resultado",
+					"value": "Resultado 2"
+				}
+			}
+		],
+		"variables": {
+			"Bandera": {
+				"type": "String"
+			},
+			"Resultado": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "CLASE04"
 		},

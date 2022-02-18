@@ -48,7 +48,7 @@
 						"value": "@array(activity('Generar rango fechas').output.value)",
 						"type": "Expression"
 					},
-					"isSequential": true,
+					"isSequential": false,
 					"activities": [
 						{
 							"name": "PL_CARGA_INCREMENTAL",

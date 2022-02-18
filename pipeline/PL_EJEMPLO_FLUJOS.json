@@ -99,6 +99,29 @@
 					"variableName": "Resultado",
 					"value": "Fin del procesp"
 				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Ejecucion Fallida",
+						"dependencyConditions": [
+							"Completed"
+						]
+					},
+					{
+						"activity": "Completado",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Resultado",
+					"value": "asred"
+				}
 			}
 		],
 		"variables": {

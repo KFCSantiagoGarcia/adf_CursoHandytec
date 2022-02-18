@@ -65,6 +65,23 @@
 					"variableName": "Resultado",
 					"value": "Resultado 2"
 				}
+			},
+			{
+				"name": "Resultado Adicional 2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Resultado Adicional",
+						"dependencyConditions": [
+							"Skipped"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Resultado",
+					"value": "Resultado 3"
+				}
 			}
 		],
 		"variables": {

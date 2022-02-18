@@ -1,0 +1,67 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-grupokfc-santiago-garcia"
+		},
+		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_FechaInicio": {
+			"type": "string",
+			"defaultValue": "2019-01-01"
+		},
+		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_FechaFin": {
+			"type": "string",
+			"defaultValue": "2019-12-31"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/SC_CalendarizadoCargaInicial')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "PL_CARGA_RANGO_FECHAS",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"FechaInicio": "[parameters('SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_FechaInicio')]",
+							"FechaFin": "[parameters('SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_FechaFin')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Month",
+						"interval": 1,
+						"startTime": "2022-02-18T21:23:00",
+						"endTime": "2022-02-19T21:23:00",
+						"timeZone": "SA Pacific Standard Time",
+						"schedule": {
+							"minutes": [
+								35
+							],
+							"hours": [
+								16
+							],
+							"monthDays": [
+								18
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

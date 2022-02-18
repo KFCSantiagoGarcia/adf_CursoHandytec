@@ -34,6 +34,12 @@
 		},
 		"ls_kfc_DataLakeV2_properties_typeProperties_url": {
 			"value": "https://dlsgrupokfcadf.dfs.core.windows.net"
+		},
+		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_FechaInicio": {
+			"value": "2019-01-01"
+		},
+		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_FechaFin": {
+			"value": "2019-12-31"
 		}
 	}
 }

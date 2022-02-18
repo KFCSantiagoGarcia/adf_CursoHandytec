@@ -4,24 +4,24 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Nombre de instancia de Data Factory",
+			"metadata": "Data Factory name",
 			"defaultValue": "adf-grupokfc-santiago-garcia"
 		},
 		"ls_SQLServerLocal_connectionString": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"connectionString\"de \"ls_SQLServerLocal\""
+			"metadata": "Secure string for 'connectionString' of 'ls_SQLServerLocal'"
 		},
 		"ls_SQLServerLocal_password": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"password\"de \"ls_SQLServerLocal\""
+			"metadata": "Secure string for 'password' of 'ls_SQLServerLocal'"
 		},
 		"ls_fileSystemLocal_password": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"password\"de \"ls_fileSystemLocal\""
+			"metadata": "Secure string for 'password' of 'ls_fileSystemLocal'"
 		},
 		"ls_kfc_DataLakeV2_accountKey": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"accountKey\"de \"ls_kfc_DataLakeV2\""
+			"metadata": "Secure string for 'accountKey' of 'ls_kfc_DataLakeV2'"
 		},
 		"ls_SQLServerLocal_properties_typeProperties_userName": {
 			"type": "string",
@@ -46,6 +46,14 @@
 		"ls_kfc_DataLakeV2_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dlsgrupokfcadf.dfs.core.windows.net"
+		},
+		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_FechaInicio": {
+			"type": "string",
+			"defaultValue": "2019-01-01"
+		},
+		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_FechaFin": {
+			"type": "string",
+			"defaultValue": "2019-12-31"
 		}
 	},
 	"variables": {
@@ -1067,6 +1075,51 @@
 				"typeProperties": {}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SC_CalendarizadoCargaInicial')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "PL_CARGA_RANGO_FECHAS",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"FechaInicio": "[parameters('SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_FechaInicio')]",
+							"FechaFin": "[parameters('SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_FechaFin')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Month",
+						"interval": 1,
+						"startTime": "2022-02-18T21:23:00",
+						"endTime": "2022-02-19T21:23:00",
+						"timeZone": "SA Pacific Standard Time",
+						"schedule": {
+							"minutes": [
+								35
+							],
+							"hours": [
+								16
+							],
+							"monthDays": [
+								18
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/PL_CARGA_RANGO_FECHAS')]"
+			]
 		}
 	]
 }

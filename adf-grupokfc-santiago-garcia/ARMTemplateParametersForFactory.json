@@ -1,0 +1,39 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-grupokfc-santiago-garcia"
+		},
+		"ls_SQLServerLocal_connectionString": {
+			"value": ""
+		},
+		"ls_SQLServerLocal_password": {
+			"value": ""
+		},
+		"ls_fileSystemLocal_password": {
+			"value": ""
+		},
+		"ls_kfc_DataLakeV2_accountKey": {
+			"value": ""
+		},
+		"ls_SQLServerLocal_properties_typeProperties_userName": {
+			"value": "KFC\\santiago.garcia"
+		},
+		"ls_azureSQLDaraBase_properties_typeProperties_connectionString_secretName": {
+			"value": "connection-string"
+		},
+		"ls_fileSystemLocal_properties_typeProperties_host": {
+			"value": "C:\\Users\\santiago.garcia\\dataFactory"
+		},
+		"ls_fileSystemLocal_properties_typeProperties_userId": {
+			"value": "KFC\\santiago.garcia"
+		},
+		"ls_keyvault_kfc_properties_typeProperties_baseUrl": {
+			"value": "https://kv-grupokfc-adf.vault.azure.net/"
+		},
+		"ls_kfc_DataLakeV2_properties_typeProperties_url": {
+			"value": "https://dlsgrupokfcadf.dfs.core.windows.net"
+		}
+	}
+}

@@ -1,0 +1,112 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Nombre de instancia de Data Factory",
+			"defaultValue": "adf-grupokfc-santiago-garcia"
+		},
+		"ls_SQLServerLocal_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"ls_SQLServerLocal\""
+		},
+		"ls_SQLServerLocal_password": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"password\"de \"ls_SQLServerLocal\""
+		},
+		"ls_fileSystemLocal_password": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"password\"de \"ls_fileSystemLocal\""
+		},
+		"ls_kfc_DataLakeV2_accountKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"accountKey\"de \"ls_kfc_DataLakeV2\""
+		},
+		"ls_SQLServerLocal_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "KFC\\santiago.garcia"
+		},
+		"ls_azureSQLDaraBase_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "connection-string"
+		},
+		"ls_fileSystemLocal_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\Users\\santiago.garcia\\dataFactory"
+		},
+		"ls_fileSystemLocal_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "KFC\\santiago.garcia"
+		},
+		"ls_keyvault_kfc_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kv-grupokfc-adf.vault.azure.net/"
+		},
+		"ls_kfc_DataLakeV2_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dlsgrupokfcadf.dfs.core.windows.net"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI de la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas."
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Token de SAS para la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adf-grupokfc-santiago-garcia_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ls_kfc_DataLakeV2_accountKey": {
+						"value": "[parameters('ls_kfc_DataLakeV2_accountKey')]"
+					},
+					"ls_SQLServerLocal_connectionString": {
+						"value": "[parameters('ls_SQLServerLocal_connectionString')]"
+					},
+					"ls_SQLServerLocal_password": {
+						"value": "[parameters('ls_SQLServerLocal_password')]"
+					},
+					"ls_fileSystemLocal_password": {
+						"value": "[parameters('ls_fileSystemLocal_password')]"
+					},
+					"ls_keyvault_kfc_properties_typeProperties_baseUrl": {
+						"value": "[parameters('ls_keyvault_kfc_properties_typeProperties_baseUrl')]"
+					},
+					"ls_kfc_DataLakeV2_properties_typeProperties_url": {
+						"value": "[parameters('ls_kfc_DataLakeV2_properties_typeProperties_url')]"
+					},
+					"ls_SQLServerLocal_properties_typeProperties_userName": {
+						"value": "[parameters('ls_SQLServerLocal_properties_typeProperties_userName')]"
+					},
+					"ls_azureSQLDaraBase_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('ls_azureSQLDaraBase_properties_typeProperties_connectionString_secretName')]"
+					},
+					"ls_fileSystemLocal_properties_typeProperties_host": {
+						"value": "[parameters('ls_fileSystemLocal_properties_typeProperties_host')]"
+					},
+					"ls_fileSystemLocal_properties_typeProperties_userId": {
+						"value": "[parameters('ls_fileSystemLocal_properties_typeProperties_userId')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

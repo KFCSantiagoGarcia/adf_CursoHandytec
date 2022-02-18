@@ -82,6 +82,23 @@
 					"variableName": "Resultado",
 					"value": "Resultado 3"
 				}
+			},
+			{
+				"name": "Completado",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Resultado",
+					"value": "Fin del procesp"
+				}
 			}
 		],
 		"variables": {

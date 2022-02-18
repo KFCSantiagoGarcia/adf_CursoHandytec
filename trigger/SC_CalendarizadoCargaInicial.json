@@ -20,7 +20,7 @@
 			"recurrence": {
 				"frequency": "Month",
 				"interval": 1,
-				"startTime": "2022-02-18T21:23:00",
+				"startTime": "2022-02-18T16:40:00",
 				"endTime": "2022-02-19T21:23:00",
 				"timeZone": "SA Pacific Standard Time",
 				"schedule": {

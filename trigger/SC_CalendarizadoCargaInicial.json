@@ -24,6 +24,12 @@
 				"endTime": "2022-02-19T21:23:00",
 				"timeZone": "SA Pacific Standard Time",
 				"schedule": {
+					"minutes": [
+						35
+					],
+					"hours": [
+						16
+					],
 					"monthDays": [
 						18
 					]

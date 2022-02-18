@@ -1098,20 +1098,17 @@
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
-						"frequency": "Month",
+						"frequency": "Day",
 						"interval": 1,
 						"startTime": "2022-02-18T21:23:00",
 						"endTime": "2022-02-19T21:23:00",
 						"timeZone": "SA Pacific Standard Time",
 						"schedule": {
 							"minutes": [
-								35
+								38
 							],
 							"hours": [
 								16
-							],
-							"monthDays": [
-								18
 							]
 						}
 					}

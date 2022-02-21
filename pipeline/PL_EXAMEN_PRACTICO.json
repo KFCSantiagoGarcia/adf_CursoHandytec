@@ -53,7 +53,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@startswith(item().TipoTabla, 'history') ",
+									"value": "@equals(item().tipoTabla, variables('tipoTabla'))",
 									"type": "Expression"
 								},
 								"ifFalseActivities": [
@@ -140,6 +140,11 @@
 										"typeProperties": {
 											"source": {
 												"type": "AzureSqlSource",
+												"additionalColumns": [
+													{
+														"value": "$$COLUMN:"
+													}
+												],
 												"sqlReaderQuery": {
 													"value": "@replace(item().Consulta, '{{fechaCorte}}', pipeline().parameters.fechaCorte)",
 													"type": "Expression"
@@ -201,6 +206,12 @@
 		"parameters": {
 			"fechaCorte": {
 				"type": "string"
+			}
+		},
+		"variables": {
+			"tipoTabla": {
+				"type": "String",
+				"defaultValue": "history"
 			}
 		},
 		"folder": {

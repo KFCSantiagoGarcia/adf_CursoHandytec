@@ -4,8 +4,12 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Nombre de instancia de Data Factory",
+			"metadata": "Data Factory name",
 			"defaultValue": "adf-grupokfc-santiago-garcia"
+		},
+		"SC_CalendarizacionTaller_properties_PL_EXAMEN_PRACTICO_parameters_fechaCorte": {
+			"type": "string",
+			"defaultValue": "2021-06-01"
 		},
 		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_FechaInicio": {
 			"type": "string",
@@ -566,6 +570,47 @@
 				"annotations": []
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SC_CalendarizacionTaller')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Se calendariza para que se ejecute todos los días a las 23h00",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "PL_EXAMEN_PRACTICO",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"fechaCorte": "[parameters('SC_CalendarizacionTaller_properties_PL_EXAMEN_PRACTICO_parameters_fechaCorte')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-02-21T18:00:00",
+						"timeZone": "SA Pacific Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								23
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/PL_EXAMEN_PRACTICO')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SC_CalendarizadoCargaInicial')]",

@@ -40,6 +40,9 @@
 		},
 		"SC_CalendarizadoCargaInicial_properties_PL_CARGA_RANGO_FECHAS_parameters_FechaFin": {
 			"value": "2019-12-31"
+		},
+		"SC_CalendarizacionTaller_properties_PL_EXAMEN_PRACTICO_parameters_fechaCorte": {
+			"value": "2021-06-01"
 		}
 	}
 }

@@ -29,7 +29,7 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "Recorremos cada registro",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -58,7 +58,7 @@
 								},
 								"ifFalseActivities": [
 									{
-										"name": "Copy data1",
+										"name": "Copia Stock",
 										"type": "Copy",
 										"dependsOn": [],
 										"policy": {
@@ -126,7 +126,7 @@
 								],
 								"ifTrueActivities": [
 									{
-										"name": "Copy data2",
+										"name": "Copia History",
 										"type": "Copy",
 										"dependsOn": [],
 										"policy": {

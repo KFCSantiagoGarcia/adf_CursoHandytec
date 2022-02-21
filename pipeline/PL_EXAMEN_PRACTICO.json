@@ -73,7 +73,7 @@
 											"source": {
 												"type": "AzureSqlSource",
 												"sqlReaderQuery": {
-													"value": "@item.Consulta",
+													"value": "@item().Consulta",
 													"type": "Expression"
 												},
 												"queryTimeout": "02:00:00",

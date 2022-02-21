@@ -136,15 +136,54 @@
 										"typeProperties": {
 											"source": {
 												"type": "AzureSqlSource",
+												"sqlReaderQuery": {
+													"value": "@replace(item().Consulta, '{{fechaCorte}}', pipeline().parameters.fechaCorte)",
+													"type": "Expression"
+												},
 												"queryTimeout": "02:00:00",
 												"partitionOption": "None"
 											},
-											"enableStaging": false
+											"sink": {
+												"type": "DelimitedTextSink",
+												"storeSettings": {
+													"type": "AzureBlobFSWriteSettings"
+												},
+												"formatSettings": {
+													"type": "DelimitedTextWriteSettings",
+													"quoteAllText": true,
+													"fileExtension": ".txt"
+												}
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
 										},
 										"inputs": [
 											{
 												"referenceName": "TBL_Leer",
 												"type": "DatasetReference"
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "csv_Escribir",
+												"type": "DatasetReference",
+												"parameters": {
+													"directorio": {
+														"value": "@concat('Taller/',item().Esquema,'/',item().Tabla)",
+														"type": "Expression"
+													},
+													"nombreArchivo": {
+														"value": "@concat(item().Tabla,'_',pipeline().parameters.fechaCorte)",
+														"type": "Expression"
+													}
+												}
 											}
 										]
 									}

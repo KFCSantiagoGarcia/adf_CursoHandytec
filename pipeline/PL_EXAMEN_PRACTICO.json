@@ -140,11 +140,6 @@
 										"typeProperties": {
 											"source": {
 												"type": "AzureSqlSource",
-												"additionalColumns": [
-													{
-														"value": "$$COLUMN:"
-													}
-												],
 												"sqlReaderQuery": {
 													"value": "@replace(item().Consulta, '{{fechaCorte}}', pipeline().parameters.fechaCorte)",
 													"type": "Expression"

@@ -4,24 +4,24 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Data Factory name",
+			"metadata": "Nombre de instancia de Data Factory",
 			"defaultValue": "adf-grupokfc-santiago-garcia"
 		},
 		"ls_SQLServerLocal_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_SQLServerLocal'"
+			"metadata": "Cadena protegida para \"connectionString\"de \"ls_SQLServerLocal\""
 		},
 		"ls_SQLServerLocal_password": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'ls_SQLServerLocal'"
+			"metadata": "Cadena protegida para \"password\"de \"ls_SQLServerLocal\""
 		},
 		"ls_fileSystemLocal_password": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'ls_fileSystemLocal'"
+			"metadata": "Cadena protegida para \"password\"de \"ls_fileSystemLocal\""
 		},
 		"ls_kfc_DataLakeV2_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ls_kfc_DataLakeV2'"
+			"metadata": "Cadena protegida para \"accountKey\"de \"ls_kfc_DataLakeV2\""
 		},
 		"ls_SQLServerLocal_properties_typeProperties_userName": {
 			"type": "string",
@@ -57,11 +57,11 @@
 		},
 		"containerUri": {
 			"type": "string",
-			"metadata": "URI to storage account containing linked ARM templates"
+			"metadata": "URI de la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas."
 		},
 		"containerSasToken": {
 			"type": "string",
-			"metadata": "Sas token to storage account containing linked ARM templates"
+			"metadata": "Token de SAS para la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas"
 		}
 	},
 	"variables": {

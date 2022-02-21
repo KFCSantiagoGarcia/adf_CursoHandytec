@@ -4,24 +4,24 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Data Factory name",
+			"metadata": "Nombre de instancia de Data Factory",
 			"defaultValue": "adf-grupokfc-santiago-garcia"
 		},
 		"ls_SQLServerLocal_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_SQLServerLocal'"
+			"metadata": "Cadena protegida para \"connectionString\"de \"ls_SQLServerLocal\""
 		},
 		"ls_SQLServerLocal_password": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'ls_SQLServerLocal'"
+			"metadata": "Cadena protegida para \"password\"de \"ls_SQLServerLocal\""
 		},
 		"ls_fileSystemLocal_password": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'ls_fileSystemLocal'"
+			"metadata": "Cadena protegida para \"password\"de \"ls_fileSystemLocal\""
 		},
 		"ls_kfc_DataLakeV2_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ls_kfc_DataLakeV2'"
+			"metadata": "Cadena protegida para \"accountKey\"de \"ls_kfc_DataLakeV2\""
 		},
 		"ls_SQLServerLocal_properties_typeProperties_userName": {
 			"type": "string",
@@ -635,6 +635,383 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/PL_EJEMPLO_FLUJOS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Bandera",
+							"value": {
+								"value": "@add(1,6)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Ejecucion Correcta",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Resultado",
+							"value": "OK"
+						}
+					},
+					{
+						"name": "Ejecucion Fallida",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Resultado",
+							"value": "FALLIDA"
+						}
+					},
+					{
+						"name": "Resultado Adicional",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Ejecucion Fallida",
+								"dependencyConditions": [
+									"Skipped"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Resultado",
+							"value": "Resultado 2"
+						}
+					},
+					{
+						"name": "Resultado Adicional 2",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Resultado Adicional",
+								"dependencyConditions": [
+									"Skipped"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Resultado",
+							"value": "Resultado 3"
+						}
+					},
+					{
+						"name": "Completado",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Resultado",
+							"value": "Fin del procesp"
+						}
+					},
+					{
+						"name": "Set variable2",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Ejecucion Fallida",
+								"dependencyConditions": [
+									"Completed"
+								]
+							},
+							{
+								"activity": "Completado",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Resultado",
+							"value": "asred"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"Bandera": {
+						"type": "String"
+					},
+					"Resultado": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "CLASE04"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_EXAMEN_PRACTICO')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Generar rango fechas",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT [idIngesta]\n      ,[esquema]\n      ,[tabla]\n      ,[consulta]\n      ,[tipoTabla]\n  FROM [par].[CatIngesta]\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "TBL_Leer",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Recorremos cada registro",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Generar rango fechas",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Generar rango fechas').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "If Condition1",
+									"type": "IfCondition",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@equals(item().tipoTabla, variables('tipoTabla'))",
+											"type": "Expression"
+										},
+										"ifFalseActivities": [
+											{
+												"name": "Copia Stock",
+												"type": "Copy",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "7.00:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "AzureSqlSource",
+														"sqlReaderQuery": {
+															"value": "@item().Consulta",
+															"type": "Expression"
+														},
+														"queryTimeout": "02:00:00",
+														"partitionOption": "None"
+													},
+													"sink": {
+														"type": "DelimitedTextSink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														},
+														"formatSettings": {
+															"type": "DelimitedTextWriteSettings",
+															"quoteAllText": true,
+															"fileExtension": ".txt"
+														}
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "TBL_Leer",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "csv_Escribir",
+														"type": "DatasetReference",
+														"parameters": {
+															"directorio": {
+																"value": "@concat('Taller/', item().Esquema,'/', item().Tabla)",
+																"type": "Expression"
+															},
+															"nombreArchivo": {
+																"value": "@concat(item().Tabla,'.csv')",
+																"type": "Expression"
+															}
+														}
+													}
+												]
+											}
+										],
+										"ifTrueActivities": [
+											{
+												"name": "Copia History",
+												"type": "Copy",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "7.00:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "AzureSqlSource",
+														"sqlReaderQuery": {
+															"value": "@replace(item().Consulta,'{{fechaCorte}}',pipeline().parameters.fechaCorte)",
+															"type": "Expression"
+														},
+														"queryTimeout": "02:00:00",
+														"partitionOption": "None"
+													},
+													"sink": {
+														"type": "DelimitedTextSink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														},
+														"formatSettings": {
+															"type": "DelimitedTextWriteSettings",
+															"quoteAllText": true,
+															"fileExtension": ".txt"
+														}
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "TBL_Leer",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "csv_Escribir",
+														"type": "DatasetReference",
+														"parameters": {
+															"directorio": {
+																"value": "@concat('Taller/',item().Esquema,'/',item().Tabla)",
+																"type": "Expression"
+															},
+															"nombreArchivo": {
+																"value": "@concat(item().Tabla,'_',pipeline().parameters.fechaCorte)",
+																"type": "Expression"
+															}
+														}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"fechaCorte": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"tipoTabla": {
+						"type": "String",
+						"defaultValue": "history"
+					}
+				},
+				"folder": {
+					"name": "EXAMEN_PRACTICO"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/TBL_Leer')]",
+				"[concat(variables('factoryId'), '/datasets/csv_Escribir')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PL_MAPEO_CAMPOS')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -791,6 +1168,30 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/TBL_Leer_tabla')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_azureSQLDaraBase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "EXAMEN_PRACTICO"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "par",
+					"table": "CatIngesta"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_azureSQLDaraBase')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/csv_EjemploClase02Nube')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -894,6 +1295,30 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_kfc_DataLakeV2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tbl_CatIngesta')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_azureSQLDaraBase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "EXAMEN_PRACTICO"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "par",
+					"table": "CatIngesta"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_azureSQLDaraBase')]"
 			]
 		},
 		{
@@ -1067,16 +1492,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/integrationRuntimeLocal')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/SC_CalendarizadoCargaInicial')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -1120,6 +1535,16 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/PL_CARGA_RANGO_FECHAS')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntimeLocal')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
 		}
 	]
 }

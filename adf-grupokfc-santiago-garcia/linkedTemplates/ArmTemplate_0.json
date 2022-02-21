@@ -4,24 +4,24 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Data Factory name",
+			"metadata": "Nombre de instancia de Data Factory",
 			"defaultValue": "adf-grupokfc-santiago-garcia"
 		},
 		"ls_kfc_DataLakeV2_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ls_kfc_DataLakeV2'"
+			"metadata": "Cadena protegida para \"accountKey\"de \"ls_kfc_DataLakeV2\""
 		},
 		"ls_SQLServerLocal_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_SQLServerLocal'"
+			"metadata": "Cadena protegida para \"connectionString\"de \"ls_SQLServerLocal\""
 		},
 		"ls_SQLServerLocal_password": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'ls_SQLServerLocal'"
+			"metadata": "Cadena protegida para \"password\"de \"ls_SQLServerLocal\""
 		},
 		"ls_fileSystemLocal_password": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'ls_fileSystemLocal'"
+			"metadata": "Cadena protegida para \"password\"de \"ls_fileSystemLocal\""
 		},
 		"ls_keyvault_kfc_properties_typeProperties_baseUrl": {
 			"type": "string",
@@ -121,6 +121,153 @@
 				},
 				"folder": {
 					"name": "CLASE01"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_EJEMPLO_FLUJOS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Bandera",
+							"value": {
+								"value": "@add(1,6)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Ejecucion Correcta",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Resultado",
+							"value": "OK"
+						}
+					},
+					{
+						"name": "Ejecucion Fallida",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Resultado",
+							"value": "FALLIDA"
+						}
+					},
+					{
+						"name": "Resultado Adicional",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Ejecucion Fallida",
+								"dependencyConditions": [
+									"Skipped"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Resultado",
+							"value": "Resultado 2"
+						}
+					},
+					{
+						"name": "Resultado Adicional 2",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Resultado Adicional",
+								"dependencyConditions": [
+									"Skipped"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Resultado",
+							"value": "Resultado 3"
+						}
+					},
+					{
+						"name": "Completado",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set variable1",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Resultado",
+							"value": "Fin del procesp"
+						}
+					},
+					{
+						"name": "Set variable2",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Ejecucion Fallida",
+								"dependencyConditions": [
+									"Completed"
+								]
+							},
+							{
+								"activity": "Completado",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Resultado",
+							"value": "asred"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"Bandera": {
+						"type": "String"
+					},
+					"Resultado": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "CLASE04"
 				},
 				"annotations": []
 			},
@@ -387,6 +534,54 @@
 				"type": "AzureSqlTable",
 				"schema": [],
 				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_azureSQLDaraBase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TBL_Leer_tabla')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_azureSQLDaraBase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "EXAMEN_PRACTICO"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "par",
+					"table": "CatIngesta"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_azureSQLDaraBase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tbl_CatIngesta')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_azureSQLDaraBase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "EXAMEN_PRACTICO"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "par",
+					"table": "CatIngesta"
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_azureSQLDaraBase')]"
@@ -737,335 +932,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/xlsx_EjemploClase02')]",
 				"[concat(variables('factoryId'), '/datasets/csv_EjemploClase02Nube')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_COPIA_LOCAL_A_PARQUET')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "ExcelSource",
-								"storeSettings": {
-									"type": "FileServerReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								}
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "ParquetWriteSettings"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "ID",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "ID",
-											"type": "String",
-											"physicalType": "UTF8"
-										}
-									},
-									{
-										"source": {
-											"name": "Nombre",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Nombre",
-											"type": "String",
-											"physicalType": "UTF8"
-										}
-									},
-									{
-										"source": {
-											"name": "Edad",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Edad",
-											"type": "String",
-											"physicalType": "UTF8"
-										}
-									}
-								],
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "xlsx_EjemploClase02",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "parquet_EjemploClase02",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "CLASE02"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/xlsx_EjemploClase02')]",
-				"[concat(variables('factoryId'), '/datasets/parquet_EjemploClase02')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_MAPEO_CAMPOS')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"sqlReaderQuery": "SELECT\n\tID1\t\t= ID\t\t\n,\tNombre1\t= Nombre\n,\tEdad1\t= Edad\nFROM [dbo].[Cliente]",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"preCopyScript": "TRUNCATE TABLE [dbo].[ClienteNube]",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false,
-								"tableOption": "autoCreate",
-								"disableMetricsCollection": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "ID1",
-											"type": "Int32",
-											"physicalType": "int"
-										},
-										"sink": {
-											"name": "ID",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "Nombre1",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"name": "Nombre",
-											"type": "String",
-											"physicalType": "nvarchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Edad1",
-											"type": "Int32",
-											"physicalType": "int"
-										},
-										"sink": {
-											"name": "Edad",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									}
-								],
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "TBL_ClienteLocal",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "tbl_ClienteNube",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "CLASE03"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/TBL_ClienteLocal')]",
-				"[concat(variables('factoryId'), '/datasets/tbl_ClienteNube')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_CARGA_RANGO_FECHAS')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Generar rango fechas",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": {
-									"value": "DECLARE @MinDate DATE = '@{pipeline().parameters.FechaInicio}',\n\t\t@MaxDate DATE = '@{pipeline().parameters.FechaFin}';\n\nSELECT CONVERT(varchar,fechaCorte,23) AS fechaCorte, MONTH(fechaCorte) as mesCorte, YEAR(fechaCorte) as anioCorte\nFROM\n(\n\tSELECT \n\tTOP(DATEDIFF(MONTH, @MinDate,@MaxDate)+1)\n\tfechaCorte= EOMONTH(DATEADD(MONTH,ROW_NUMBER() OVER (ORDER BY a.object_id)-1,@MinDate))\n\tFROM sys.all_objects a\n\tCROSS JOIN sys.all_objects b\n)fechas\n\nORDER BY fechaCorte;",
-									"type": "Expression"
-								},
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "TBL_Leer",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "Iteracion de meses",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Generar rango fechas",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@array(activity('Generar rango fechas').output.value)",
-								"type": "Expression"
-							},
-							"isSequential": false,
-							"activities": [
-								{
-									"name": "PL_CARGA_INCREMENTAL",
-									"type": "ExecutePipeline",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"pipeline": {
-											"referenceName": "PL_CARGA_INCREMENTAL",
-											"type": "PipelineReference"
-										},
-										"waitOnCompletion": true,
-										"parameters": {
-											"anio": {
-												"value": "@item().anioCorte",
-												"type": "Expression"
-											},
-											"mes": {
-												"value": "@item().mesCorte",
-												"type": "Expression"
-											}
-										}
-									}
-								}
-							]
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"parameters": {
-					"FechaInicio": {
-						"type": "string"
-					},
-					"FechaFin": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "CLASE03"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/TBL_Leer')]",
-				"[concat(variables('factoryId'), '/pipelines/PL_CARGA_INCREMENTAL')]"
 			]
 		}
 	]

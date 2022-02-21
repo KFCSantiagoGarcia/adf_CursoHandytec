@@ -122,14 +122,31 @@
 								],
 								"ifTrueActivities": [
 									{
-										"name": "Set variable1",
-										"type": "SetVariable",
+										"name": "Copy data2",
+										"type": "Copy",
 										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
 										"userProperties": [],
 										"typeProperties": {
-											"variableName": "random",
-											"value": "dfg"
-										}
+											"source": {
+												"type": "AzureSqlSource",
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"enableStaging": false
+										},
+										"inputs": [
+											{
+												"referenceName": "TBL_Leer",
+												"type": "DatasetReference"
+											}
+										]
 									}
 								]
 							}
@@ -138,6 +155,11 @@
 				}
 			}
 		],
+		"parameters": {
+			"fechaCorte": {
+				"type": "string"
+			}
+		},
 		"variables": {
 			"random": {
 				"type": "String"

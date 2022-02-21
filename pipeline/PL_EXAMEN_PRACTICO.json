@@ -199,11 +199,6 @@
 				"type": "string"
 			}
 		},
-		"variables": {
-			"random": {
-				"type": "String"
-			}
-		},
 		"folder": {
 			"name": "EXAMEN_PRACTICO"
 		},

@@ -125,7 +125,11 @@
 										"name": "Set variable1",
 										"type": "SetVariable",
 										"dependsOn": [],
-										"userProperties": []
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "random",
+											"value": "dfg"
+										}
 									}
 								]
 							}
@@ -134,6 +138,11 @@
 				}
 			}
 		],
+		"variables": {
+			"random": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "EXAMEN_PRACTICO"
 		},

@@ -1,0 +1,19 @@
+{
+	"name": "tbl_CatIngesta",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_azureSQLDaraBase",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "EXAMEN_PRACTICO"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "par",
+			"table": "CatIngesta"
+		}
+	}
+}

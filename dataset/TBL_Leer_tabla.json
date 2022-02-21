@@ -1,0 +1,15 @@
+{
+	"name": "TBL_Leer_tabla",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_azureSQLDaraBase",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "EXAMEN_PRACTICO"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}

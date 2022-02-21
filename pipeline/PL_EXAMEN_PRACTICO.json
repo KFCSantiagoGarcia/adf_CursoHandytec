@@ -35,7 +35,7 @@
 					{
 						"activity": "Generar rango fechas",
 						"dependencyConditions": [
-							"Skipped"
+							"Succeeded"
 						]
 					}
 				],

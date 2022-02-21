@@ -28,39 +28,28 @@
 				}
 			},
 			{
-				"name": "Iteracion de meses",
+				"name": "ForEach1",
 				"type": "ForEach",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Generar rango fechas",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
 						"value": "@array(activity('Generar rango fechas').output.value)",
 						"type": "Expression"
 					},
-					"isSequential": false,
 					"activities": [
 						{
-							"name": "PL_CARGA_INCREMENTAL",
-							"type": "ExecutePipeline",
+							"name": "If Condition1",
+							"type": "IfCondition",
 							"dependsOn": [],
-							"userProperties": [],
-							"typeProperties": {
-								"pipeline": {
-									"referenceName": "PL_CARGA_INCREMENTAL",
-									"type": "PipelineReference"
-								},
-								"waitOnCompletion": true,
-								"parameters": {
-									"anio": {
-										"value": "@item().anioCorte",
-										"type": "Expression"
-									},
-									"mes": {
-										"value": "@item().mesCorte",
-										"type": "Expression"
-									}
-								}
-							}
+							"userProperties": []
 						}
 					]
 				}

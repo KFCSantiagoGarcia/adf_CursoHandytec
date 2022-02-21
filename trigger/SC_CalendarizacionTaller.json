@@ -4,7 +4,17 @@
 		"description": "Se calendariza para que se ejecute todos los días a las 23h00",
 		"annotations": [],
 		"runtimeState": "Started",
-		"pipelines": [],
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "PL_EXAMEN_PRACTICO",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"fechaCorte": "2021-06-01"
+				}
+			}
+		],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {

@@ -112,7 +112,7 @@
 												"type": "DatasetReference",
 												"parameters": {
 													"directorio": {
-														"value": "@concat('Taller/',item().Esquema,'/',item().Tabla)",
+														"value": "@concat('Taller/', item().Esquema,'/', item().Tabla)",
 														"type": "Expression"
 													},
 													"nombreArchivo": {
@@ -141,7 +141,7 @@
 											"source": {
 												"type": "AzureSqlSource",
 												"sqlReaderQuery": {
-													"value": "@replace(item().Consulta, '{{fechaCorte}}', pipeline().parameters.fechaCorte)",
+													"value": "@replace(item().Consulta,'{{fechaCorte}}',pipeline().parameters.fechaCorte)",
 													"type": "Expression"
 												},
 												"queryTimeout": "02:00:00",

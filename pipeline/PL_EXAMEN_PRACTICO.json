@@ -17,11 +17,12 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT [idIngesta]\n      ,[esquema]\n      ,[tabla]\n      ,[consulta]\n      ,[tipoTabla]\n  FROM [par].[CatIngesta]\n",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "TBL_Leer_tabla",
+						"referenceName": "TBL_Leer",
 						"type": "DatasetReference"
 					},
 					"firstRowOnly": false
@@ -34,7 +35,7 @@
 					{
 						"activity": "Generar rango fechas",
 						"dependencyConditions": [
-							"Succeeded"
+							"Skipped"
 						]
 					}
 				],
@@ -71,7 +72,10 @@
 										"typeProperties": {
 											"source": {
 												"type": "AzureSqlSource",
-												"sqlReaderQuery": "@item.Consulta",
+												"sqlReaderQuery": {
+													"value": "@item.Consulta",
+													"type": "Expression"
+												},
 												"queryTimeout": "02:00:00",
 												"partitionOption": "None"
 											},
